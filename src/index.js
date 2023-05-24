@@ -20,9 +20,17 @@ function btnInputSearchStart(event) {
     getApiSearch(inputText, page).then(data => {
       //  console.log(data.total);
       if (data.total) {
+        Notify.failure(`Hooray! We found ${data.totalHits} images.`);
+
         const { hits } = data;
         createPage(hits);
-        refs.btnMoreSearch.style.opacity = '1';
+        if (data.hits.length === 40) {
+          refs.btnMoreSearch.style.opacity = '1';
+        } else {
+          Notify.failure(
+            "We're sorry, but you've reached the end of search results."
+          );
+        }
       } else {
         Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
@@ -39,7 +47,11 @@ async function btnMoreDownload() {
   const inputText = refs.searchInputForm.elements.searchQuery.value;
   getApiSearch(inputText, page).then(data => {
     //console.log(data.hits.length);
-    if (data.hits.length <= 40 && data.hits.length > 0) {
+    console.log(data.totalHits);
+    if (data.hits.length > 39) {
+      Notify.failure(
+        `Hooray! We found ${data.totalHits - data.hits.length} images.`
+      );
       //  console.log(data.hits);
       //  console.log(data);
       //  console.log(hits);
@@ -47,7 +59,13 @@ async function btnMoreDownload() {
       console.log(hits);
       createMorePage(data.hits);
     } else {
+      const { hits } = data;
+      console.log(hits);
+      createMorePage(data.hits);
       refs.btnMoreSearch.setAttribute('disabled', '');
+      Notify.failure(
+        "We're sorry, but you've reached the end of search results."
+      );
     }
   });
 }
