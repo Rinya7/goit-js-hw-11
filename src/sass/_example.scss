@@ -1,37 +1,57 @@
 .search-form {
+  padding: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-button {
-  -webkit-box-shadow: 0px 10px 10px 0px #000000;
-  box-shadow: 0px 10px 10px 0px #000000;
+.btn-send {
+  margin-top: 15px;
+}
 
-  color: rgb(255, 255, 255);
-  font-size: 16px;
-  line-height: 16px;
-  padding: 3px;
-  border-radius: 2px;
-  font-family: Georgia, serif;
+.load-more {
+  opacity: 0;
+}
+.more {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.gallery {
+  //  max-width: 1158px;
+  padding: 0 15px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.info-item {
+  display: grid;
+  padding: 5px;
+  //  border: 2px solid rgba(28, 110, 164, 0.28);
+}
+.info {
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
+}
+img {
+  display: block;
+  width: 360px;
+  height: 300px;
+}
+.photo-card {
+  border: 2px solid rgba(28, 110, 164, 0.28);
+  margin-bottom: 25px;
+  -webkit-box-shadow: 1px 10px 23px 4px rgba(91, 51, 91, 0.61);
+  box-shadow: 1px 10px 23px 4px rgba(91, 51, 91, 0.61);
+}
+.photo-card:not(:nth-last-child) {
+  margin-bottom: 13px;
+}
+
+p > b:last-child {
   font-weight: normal;
-  text-decoration: none;
-  font-style: normal;
-  font-variant: normal;
-  text-transform: none;
-  background-image: linear-gradient(
-    to right,
-    rgb(28, 110, 164) 0%,
-    rgb(35, 136, 203) 50%,
-    rgb(20, 78, 117) 100%
-  );
-  box-shadow: rgb(0, 0, 0) 0px 10px 10px 0px;
-  border: 2px solid rgb(28, 110, 164);
-  display: inline-block;
 }
-button:hover {
-  background: #1c6ea4;
-}
-button:active {
-  background: #144e75;
+.photo-card:not(:nth-child(4n)) {
+  margin-right: 24px;
 }
