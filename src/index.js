@@ -3,6 +3,7 @@ Notify.success('Починаємо пошук');
 import { getApiSearch } from './javascript.js/axios.js';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+var throttle = require('lodash.throttle');
 
 const refs = {
   searchInputForm: document.querySelector('#search-form'),
@@ -16,7 +17,7 @@ let dataTotalExport = null;
 
 refs.btnStartSearch.addEventListener('click', btnInputSearchStart);
 refs.btnMoreSearch.addEventListener('click', btnMoreDownload);
-//window.addEventListener('scroll', scroll);
+window.addEventListener('scroll', throttle(unlimmitedScroll, 200));
 
 function btnInputSearchStart(event) {
   event.preventDefault();
@@ -25,13 +26,11 @@ function btnInputSearchStart(event) {
     getApiSearch(inputText, page).then(data => {
       dataTotalExport = data.totalHits - data.hits.length;
       if (data.total) {
-        Notify.failure(`Hooray! We found ${data.totalHits} images.`);
+        Notify.info(`Hooray! We found ${data.totalHits} images.`);
 
         const { hits } = data;
         createPage(hits);
         gallery.refresh();
-        //ScroolPlavny();
-        //onscroll = unlimScroll();
         if (data.hits.length === 40) {
           refs.btnMoreSearch.style.opacity = '1';
         } else {
@@ -54,23 +53,21 @@ async function btnMoreDownload() {
   page += 1;
   const inputText = refs.searchInputForm.elements.searchQuery.value;
   getApiSearch(inputText, page).then(data => {
-    //console.log(data.hits.length);
-    console.log(data.totalHits);
     if (data.hits.length > 39) {
       dataTotalExport -= data.hits.length;
-      Notify.failure(`You can see ${dataTotalExport} more images.`);
+      Notify.info(`You can see ${dataTotalExport} more images.`);
 
       const { hits } = data;
-      console.log(hits);
+
       createMorePage(data.hits);
       gallery.refresh();
-      ScroolPlavny();
-      //  onscroll = unlimScroll();
+      //  ScroolPlavny();
     } else {
       const { hits } = data;
-      console.log(hits);
+
       createMorePage(data.hits);
       refs.btnMoreSearch.setAttribute('disabled', '');
+      dataTotalExport -= data.hits.length;
       Notify.failure(
         "We're sorry, but you've reached the end of search results."
       );
@@ -169,42 +166,25 @@ let gallery = new SimpleLightbox('.gallery a', {
   captionDelay: 250,
 });
 
-function ScroolPlavny() {
+//function ScroolPlavny() {
+//  const { height: cardHeight } = document
+//    .querySelector('.gallery')
+//    .firstElementChild.getBoundingClientRect();
+//  window.scrollBy({
+//    top: cardHeight * 2,
+//    behavior: 'smooth',
+//  });
+//}
+
+function unlimmitedScroll() {
   const { height: cardHeight } = document
     .querySelector('.gallery')
     .firstElementChild.getBoundingClientRect();
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
+
+  if (
+    document.documentElement.getBoundingClientRect().bottom < 3 * cardHeight &&
+    dataTotalExport > 0
+  ) {
+    btnMoreDownload();
+  }
 }
-
-//function scroll() {
-//  console.log(refs.btnMoreSearch.getBoundingClientRect());
-//  const { height: cardHeight } = document
-//    .querySelector('.gallery')
-//    .firstElementChild.getBoundingClientRect();
-//  console.log('card:', cardHeight);
-//}
-
-//function unlimScroll() {
-//  const { height: cardHeight } = document
-//    .querySelector('.gallery')
-//    .firstElementChild.getBoundingClientRect();
-//  while (true) {
-//    // нижня частина документа
-
-//    let windowRelativeBottom =
-//      document.documentElement.getBoundingClientRect().bottom;
-
-//    // якщо користувач не прокрутив достатньо далеко (>100px до кінця)
-//    if (
-//      windowRelativeBottom >
-//      document.documentElement.clientHeight + 2 * cardHeight
-//    )
-//      break;
-
-//    // додамо більше даних
-//    btnMoreDownload();
-//  }
-//}
