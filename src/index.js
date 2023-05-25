@@ -9,6 +9,7 @@ const refs = {
   btnMoreSearch: document.querySelector('.load-more'),
 };
 let page = 1;
+let dataTotalExport = null;
 
 refs.btnStartSearch.addEventListener('click', btnInputSearchStart);
 refs.btnMoreSearch.addEventListener('click', btnMoreDownload);
@@ -18,7 +19,7 @@ function btnInputSearchStart(event) {
   const inputText = refs.searchInputForm.elements.searchQuery.value;
   if (inputText) {
     getApiSearch(inputText, page).then(data => {
-      //  console.log(data.total);
+      dataTotalExport = data.totalHits - data.hits.length;
       if (data.total) {
         Notify.failure(`Hooray! We found ${data.totalHits} images.`);
 
@@ -49,9 +50,8 @@ async function btnMoreDownload() {
     //console.log(data.hits.length);
     console.log(data.totalHits);
     if (data.hits.length > 39) {
-      Notify.failure(
-        `Hooray! We found ${data.totalHits - data.hits.length} images.`
-      );
+      dataTotalExport -= data.hits.length;
+      Notify.failure(`You can see ${dataTotalExport} more images.`);
       //  console.log(data.hits);
       //  console.log(data);
       //  console.log(hits);
