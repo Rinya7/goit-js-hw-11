@@ -29,15 +29,8 @@ function btnInputSearchStart(event) {
         const { hits } = data;
         createPage(hits);
         gallery.refresh();
-        const { height: cardHeight } = document
-          .querySelector('.gallery')
-          .firstElementChild.getBoundingClientRect();
-
-        window.scrollBy({
-          top: cardHeight * 2,
-          behavior: 'smooth',
-        });
-        //console.log(cardHeight);
+        ScroolPlavny();
+        //unlimScroll();
         if (data.hits.length === 40) {
           refs.btnMoreSearch.style.opacity = '1';
         } else {
@@ -65,20 +58,13 @@ async function btnMoreDownload() {
     if (data.hits.length > 39) {
       dataTotalExport -= data.hits.length;
       Notify.failure(`You can see ${dataTotalExport} more images.`);
-      //  console.log(data.hits);
-      //  console.log(data);
-      //  console.log(hits);
+
       const { hits } = data;
       console.log(hits);
       createMorePage(data.hits);
       gallery.refresh();
-      const { height: cardHeight } = document
-        .querySelector('.gallery')
-        .firstElementChild.getBoundingClientRect();
-      window.scrollBy({
-        top: cardHeight * 2,
-        behavior: 'smooth',
-      });
+      ScroolPlavny();
+      //  unlimScroll();
     } else {
       const { hits } = data;
       console.log(hits);
@@ -181,3 +167,31 @@ let gallery = new SimpleLightbox('.gallery a', {
   captionPosition: 'bottom',
   captionDelay: 250,
 });
+
+//function unlimScroll() {
+//  const { height: cardHeight } = document
+//    .querySelector('.gallery')
+//    .firstElementChild.getBoundingClientRect();
+//  while (true) {
+//    // нижня частина документа
+
+//    let windowRelativeBottom =
+//      document.documentElement.getBoundingClientRect().bottom;
+
+//    // якщо користувач не прокрутив достатньо далеко (>100px до кінця)
+//    if (windowRelativeBottom > 2 * cardHeight) break;
+
+//    // додамо більше даних
+//    btnMoreDownload;
+//  }
+//}
+
+function ScroolPlavny() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
+}
