@@ -10,6 +10,7 @@ const refs = {
   contentForPictures: document.querySelector('.gallery'),
   btnMoreSearch: document.querySelector('.load-more'),
 };
+
 let page = 1;
 let dataTotalExport = null;
 
@@ -28,6 +29,15 @@ function btnInputSearchStart(event) {
         const { hits } = data;
         createPage(hits);
         gallery.refresh();
+        const { height: cardHeight } = document
+          .querySelector('.gallery')
+          .firstElementChild.getBoundingClientRect();
+
+        window.scrollBy({
+          top: cardHeight * 2,
+          behavior: 'smooth',
+        });
+        //console.log(cardHeight);
         if (data.hits.length === 40) {
           refs.btnMoreSearch.style.opacity = '1';
         } else {
@@ -62,6 +72,13 @@ async function btnMoreDownload() {
       console.log(hits);
       createMorePage(data.hits);
       gallery.refresh();
+      const { height: cardHeight } = document
+        .querySelector('.gallery')
+        .firstElementChild.getBoundingClientRect();
+      window.scrollBy({
+        top: cardHeight * 2,
+        behavior: 'smooth',
+      });
     } else {
       const { hits } = data;
       console.log(hits);
