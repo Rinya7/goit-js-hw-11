@@ -21,7 +21,7 @@ window.addEventListener('scroll', throttle(unlimmitedScroll, 200));
 
 function btnInputSearchStart(event) {
   event.preventDefault();
-  const inputText = refs.searchInputForm.elements.searchQuery.value;
+  const inputText = refs.searchInputForm.elements.searchQuery.value.trim();
   if (inputText) {
     getApiSearch(inputText, page).then(data => {
       dataTotalExport = data.totalHits - data.hits.length;
