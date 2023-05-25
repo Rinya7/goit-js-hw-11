@@ -1,6 +1,8 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 Notify.success('Починаємо пошук');
 import { getApiSearch } from './javascript.js/axios.js';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const refs = {
   searchInputForm: document.querySelector('#search-form'),
@@ -25,6 +27,7 @@ function btnInputSearchStart(event) {
 
         const { hits } = data;
         createPage(hits);
+        gallery.refresh();
         if (data.hits.length === 40) {
           refs.btnMoreSearch.style.opacity = '1';
         } else {
@@ -58,6 +61,7 @@ async function btnMoreDownload() {
       const { hits } = data;
       console.log(hits);
       createMorePage(data.hits);
+      gallery.refresh();
     } else {
       const { hits } = data;
       console.log(hits);
@@ -83,6 +87,7 @@ function createPage(arr) {
         downloads,
       }) =>
         (refs.contentForPictures.innerHTML = `
+        <a class="gallery__link" href=${largeImageURL}>
           <div class="photo-card">
           <img src="${webformatURL}" alt="${tags}" loading="lazy" />
           <div class="info">
@@ -103,7 +108,7 @@ function createPage(arr) {
                 <b>${downloads}</b>
               </p>
             </div>
-        </div>`)
+        </div></a>`)
     )
     .join(''));
 }
@@ -125,6 +130,7 @@ function createMorePage(arr) {
           refs.contentForPictures.insertAdjacentHTML(
             'beforeend',
             `
+            <a class="gallery__link" href=${largeImageURL}>
             <div class="photo-card">
             <img src="${webformatURL}" alt="${tags}" loading="lazy" />
             <div class="info">
@@ -145,9 +151,16 @@ function createMorePage(arr) {
                 <b>${downloads}</b>
               </p>
             </div>
-          </div>`
+          </div></a>`
           )
       )
       .join('')
   );
 }
+
+let gallery = new SimpleLightbox('.gallery a', {
+  //  captionType: "alt",
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
