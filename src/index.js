@@ -16,6 +16,7 @@ let dataTotalExport = null;
 
 refs.btnStartSearch.addEventListener('click', btnInputSearchStart);
 refs.btnMoreSearch.addEventListener('click', btnMoreDownload);
+//window.addEventListener('scroll', scroll);
 
 function btnInputSearchStart(event) {
   event.preventDefault();
@@ -29,8 +30,8 @@ function btnInputSearchStart(event) {
         const { hits } = data;
         createPage(hits);
         gallery.refresh();
-        ScroolPlavny();
-        //unlimScroll();
+        //ScroolPlavny();
+        //onscroll = unlimScroll();
         if (data.hits.length === 40) {
           refs.btnMoreSearch.style.opacity = '1';
         } else {
@@ -64,7 +65,7 @@ async function btnMoreDownload() {
       createMorePage(data.hits);
       gallery.refresh();
       ScroolPlavny();
-      //  unlimScroll();
+      //  onscroll = unlimScroll();
     } else {
       const { hits } = data;
       console.log(hits);
@@ -168,6 +169,24 @@ let gallery = new SimpleLightbox('.gallery a', {
   captionDelay: 250,
 });
 
+function ScroolPlavny() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
+}
+
+//function scroll() {
+//  console.log(refs.btnMoreSearch.getBoundingClientRect());
+//  const { height: cardHeight } = document
+//    .querySelector('.gallery')
+//    .firstElementChild.getBoundingClientRect();
+//  console.log('card:', cardHeight);
+//}
+
 //function unlimScroll() {
 //  const { height: cardHeight } = document
 //    .querySelector('.gallery')
@@ -179,19 +198,13 @@ let gallery = new SimpleLightbox('.gallery a', {
 //      document.documentElement.getBoundingClientRect().bottom;
 
 //    // якщо користувач не прокрутив достатньо далеко (>100px до кінця)
-//    if (windowRelativeBottom > 2 * cardHeight) break;
+//    if (
+//      windowRelativeBottom >
+//      document.documentElement.clientHeight + 2 * cardHeight
+//    )
+//      break;
 
 //    // додамо більше даних
-//    btnMoreDownload;
+//    btnMoreDownload();
 //  }
 //}
-
-function ScroolPlavny() {
-  const { height: cardHeight } = document
-    .querySelector('.gallery')
-    .firstElementChild.getBoundingClientRect();
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
-}
